@@ -1,0 +1,30 @@
+# Maven / Build
+target/
+build/
+
+# IDE
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+
+# Application config (only if sensitive)
+application.properties
+application.yml
