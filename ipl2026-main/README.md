@@ -1,10 +1,19 @@
 ## IPL 2026 REST API
 
-A backend REST API built using Spring Boot for managing IPL 2026 team data. The application follows a layered architecture and demonstrates CRUD operations, filtering, sorting, and exception handling using modern backend development practices.
+This is a Spring Boot backend project for managing laptops with secure authentication using JWT and BCrypt password hashing.
+
+The project follows a layered architecture (Controller → Service → Repository → Entity) and uses DTO pattern for clean request/response handling.
 
 ## Features
 
-Create, update, delete IPL teams, Retrieve all teams or a specific team by ID. Get top 5 teams based on Net Run Rate (NRR)
+- User Registration & Login
+- JWT Authentication
+- BCrypt Password Encryption
+- DTO Pattern Implementation
+- Global Exception Handling
+- REST API Design
+- MySQL Database Integration
+- Clean Layered Architecture
 
 ## Filter teams by:
 
@@ -15,16 +24,16 @@ Retrieve the best performing team
 
 ## Tech Stack
   
-Java
-Spring Boot
-Spring Security
-JWT (JSON Web Token)
-BCrypt
-Spring Data JPA
-Hibernate
-MySQL
-Maven
-Postman
+- Java
+- Spring Boot
+- Spring Security
+- JWT (JSON Web Token)
+- BCrypt
+- Spring Data JPA
+- Hibernate
+- MySQL
+- Maven
+- Postman
 
 ## Architecture  
   
