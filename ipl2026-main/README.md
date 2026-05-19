@@ -17,10 +17,10 @@ The project follows a layered architecture (Controller → Service → Repositor
 
 ## Filter teams by:
 
-NRR
-Matches won
-Matches played
-Retrieve the best performing team
+>NRR  
+>Matches won  
+>Matches played  
+>Retrieve the best performing team  
 
 ## Tech Stack
   
