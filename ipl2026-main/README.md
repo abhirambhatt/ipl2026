@@ -4,9 +4,7 @@ A backend REST API built using Spring Boot for managing IPL 2026 team data. The 
 
 ## Features
 
-Create, update, delete IPL teams
-Retrieve all teams or a specific team by ID
-Get top 5 teams based on Net Run Rate (NRR)
+Create, update, delete IPL teams, Retrieve all teams or a specific team by ID. Get top 5 teams based on Net Run Rate (NRR)
 
 ## Filter teams by:
 
@@ -14,14 +12,18 @@ NRR
 Matches won
 Matches played
 Retrieve the best performing team
-Global exception handling with structured responses
-Tech Stack
+
+## Tech Stack
+  
 Java
 Spring Boot
-Spring Web
+Spring Security
+JWT (JSON Web Token)
+BCrypt
 Spring Data JPA
 Hibernate
 MySQL
+Maven
 Postman
 
 ## Architecture  
@@ -32,23 +34,16 @@ Controller → Service → Repository → Database
 ```
 com.ipl2026.ipl2026
 │
-├── controller
-│   └── IPLController.java
-│
-├── service
+├── config         → Security configuration
+├── controller     → REST APIs
+├── dto            → Request & Response objects
+├── entity         → Database entities
+├── exception      → Global exception handling
+├── repository     → JPA repositories
+├── security       → JWT + Filter
+├── service        → Business logic
 │   ├── IPLService.java
 │   └── IPLServiceImpl.java
-│
-├── repository
-│   └── IPLRepository.java
-│
-├── entity
-│   └── IPL2026.java
-│
-├── exception
-│   ├── GlobalExceptionHandler.java
-│   ├── TeamNotFoundException.java
-│   └── TeamErrorResponse.java
 │
 └── Ipl2026Application.java
 ```
@@ -80,6 +75,13 @@ Create Team
     "nrr": 0.82  
 }  
 
+Login
+  
+{  
+  "email": "user@gmail.com",
+  "password": "123456"
+}  
+
 
 ## Sample Response
   
@@ -109,11 +111,5 @@ Structured error responses are returned for invalid requests or missing resource
 > 3. Run the application
 > 4. mvn spring-boot:run
 
-## Future Improvements
 
-* DTO Layer
-* Validation using @Valid
-* Swagger / OpenAPI documentation
-* Unit testing
-* Authentication & Authorization
 
