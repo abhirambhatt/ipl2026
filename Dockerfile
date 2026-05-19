@@ -6,6 +6,6 @@ COPY . .
 
 RUN apt-get update && apt-get install -y maven
 
-RUN mvn clean install -DskipTests
+RUN mvn clean install -DskipTests -e
 
 CMD java -jar target/*.jar
