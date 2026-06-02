@@ -1,7 +1,7 @@
 ## IPL 2026 REST API
 
 This is a Spring Boot backend application for managing IPL 2026 team data.
-The project demonstrates clean architecture, secure authentication using JWT, and modern backend practices like DTOs and exception handling.
+The project demonstrates clean architecture, secure authentication using JWT, JPA relationships, and modern backend practices like DTOs, validation, and exception handling.
 
 ## Features
 
@@ -17,6 +17,9 @@ The project demonstrates clean architecture, secure authentication using JWT, an
 - BCrypt Password Hashing 
 - DTO Pattern implementation
 - Global Exception Handling
+- JPA One-To-Many & Many-To-One Relationships
+- Create a team and assign multiple players to the team
+- Create players using team name without manually providing team ID
   
 
 ## Tech Stack
@@ -40,16 +43,48 @@ Controller → Service → Repository → Database
 ```
 com.ipl2026.ipl2026
 │
-├── config         → Security configuration
-├── controller     → REST APIs
-├── dto            → Request & Response objects
-├── entity         → Database entities
-├── exception      → Global exception handling
-├── repository     → JPA repositories
-├── security       → JWT + Filter
-├── service        → Business logic
-│   ├── IPLService.java
-│   └── IPLServiceImpl.java
+├── config
+│   ├── PasswordConfig.java
+│   └── SecurityConfig.java
+│
+├── controller
+│   ├── AuthController.java
+│   ├── PlayerController.java
+│   └── TeamController.java
+│
+├── dto
+│   ├── Request
+│   │   ├── LoginRequest.java
+│   │   ├── PlayersRequest.java
+│   │   └── RegisterRequest.java
+│   │
+│   └── Response
+│       └── AuthResponse.java
+│
+├── entity
+│   ├── Players.java
+│   ├── Team.java
+│   └── User.java
+│
+├── exception
+│   ├── GlobalExceptionHandler.java
+│   ├── TeamErrorResponse.java
+│   └── TeamNotFoundException.java
+│
+├── repository
+│   ├── PlayerRepository.java
+│   ├── TeamRepository.java
+│   └── UserRepository.java
+│
+├── security
+│   ├── JwtFilter.java
+│   └── JwtUtil.java
+│
+├── service
+│   ├── PlayerService.java
+│   ├── PlayerServiceImpl.java
+│   ├── TeamService.java
+│   └── TeamServiceImpl.java
 │
 └── Ipl2026Application.java
 ```
@@ -62,20 +97,79 @@ com.ipl2026.ipl2026
 5. JWT Filter validates request
 6. Access granted to protected APIs
 
+## JPA Relationship
+
+This project implements a bidirectional One-To-Many and Many-To-One relationship between Team and Players.
+
+### Relationship Structure
+
+One Team → Many Players
+
+```text
+Royal Challengers Bengaluru
+├── Virat Kohli
+├── Rajat Patidar
+├── Josh Hazlewood
+└── Yash Dayal
+```
+
+## Team Entity
+  
+@OneToMany(mappedBy = "team", cascade = CascadeType.ALL)  
+@JsonManagedReference  
+private List<Players> players;
+  
+Players Entity
+@ManyToOne
+@JoinColumn(name = "team_id")
+@JsonBackReference
+private Team team;  
+
+## Validation Rules
+- Team name cannot be blank
+- Team captain cannot be blank
+- Matches played cannot be negative
+- Matches won cannot be negative
+- Matches won cannot exceed matches played
+- NRR is validated before persistence
+
+
+
+
 ## API Endpoints
 
-| Method | Endpoint                     | Description             |
-| ------ | ---------------------------- | ----------------------- |
-| POST   | `/api/ipl`                   | Create team             |
-| GET    | `/api/ipl`                   | Get all teams           |
-| GET    | `/api/ipl/{id}`              | Get team by ID          |
-| PATCH  | `/api/ipl/{id}`              | Update team             |
-| DELETE | `/api/ipl/{id}`              | Delete team             |
-| GET    | `/api/ipl/top5`              | Top 5 teams by NRR      |
-| GET    | `/api/ipl/nrr/{nrr}`         | Filter teams by NRR     |
-| GET    | `/api/ipl/wins/{wins}`       | Filter teams by wins    |
-| GET    | `/api/ipl/matches/{matches}` | Filter teams by matches |
-| GET    | `/api/ipl/best`              | Get best team           |
+### Authentication APIs
+
+| Method | Endpoint | Description |
+|----------|----------|----------|
+| POST | `/auth/register` | Register new user |
+| POST | `/auth/login` | Login and generate JWT token |
+
+---
+
+### Team APIs
+
+| Method | Endpoint | Description |
+|----------|----------|----------|
+| POST | `/api/ipl` | Create team |
+| GET | `/api/ipl` | Get all teams |
+| GET | `/api/ipl/{id}` | Get team by ID |
+| PATCH | `/api/ipl/{id}` | Update team |
+| DELETE | `/api/ipl/{id}` | Delete team |
+| GET | `/api/ipl/top5` | Get top 5 teams by NRR |
+| GET | `/api/ipl/best` | Get best performing team |
+| GET | `/api/ipl/nrr/{nrr}` | Filter teams by NRR |
+| GET | `/api/ipl/wins/{wins}` | Filter teams by matches won |
+| GET | `/api/ipl/matches/{matches}` | Filter teams by matches played |
+
+---
+
+### Player APIs
+
+| Method | Endpoint | Description |
+|----------|----------|----------|
+| POST | `/api/players` | Create player and assign to team using team name |
+
 
 ## Sample Request
 
@@ -88,6 +182,13 @@ Create Team
     "noOfMatchesWon": 9,  
     "nrr": 0.82  
 }  
+
+Create Player
+
+{
+   "playername": "Virat Kohli",
+   "teamName": "RCB"
+}
 
 Login
   
