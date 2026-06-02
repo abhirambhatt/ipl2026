@@ -1,6 +1,6 @@
-## IPL 2026 REST API
+## IPL REST API
 
-This is a Spring Boot backend application for managing IPL 2026 team data.
+This is a Spring Boot backend application for managing IPL team data.
 The project demonstrates clean architecture, secure authentication using JWT, JPA relationships, and modern backend practices like DTOs, validation, and exception handling.
 
 ## Features
@@ -132,8 +132,6 @@ private Team team;
 - Matches won cannot be negative
 - Matches won cannot exceed matches played
 - NRR is validated before persistence
-
-
 
 
 ## API Endpoints
